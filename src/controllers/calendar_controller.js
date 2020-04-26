@@ -1,16 +1,44 @@
 import { Controller } from "stimulus"
 import * as moment from "moment"
 
-const buildCalendar = (controller, selectedMoment) => {
-  buildHeader(controller.element, controller.data, selectedMoment)
-  buildBody(controller.element, controller.data, selectedMoment)
+const clearCalendar = (element) => {
+  element.innerHTML = ''
+}
+
+const buildCalendar = (context, selectedMoment) => {
+  clearCalendar(context.element)
+  buildHeader(context.element, context.data, selectedMoment)
+  buildBody(context.element, context.data, selectedMoment)
 }
 
 const buildHeader = (element, data, selectedMoment) => {
   let header = document.createElement("div")
   header.id = "calendar-header"
-  header.innerHTML = selectedMoment.format("MMMM YYYY")
 
+  let headerItem = document.createElement("div")
+  headerItem.className="calendar-header-item"
+
+  let prevButton = document.createElement("i")
+  prevButton.className = "fas fa-chevron-left"
+
+  let leftItem = headerItem.cloneNode()
+  leftItem.dataset.action = "click->calendar#prevMonth"
+  leftItem.appendChild(prevButton)
+  header.appendChild(leftItem)
+
+
+  let centerItem = headerItem.cloneNode()
+  centerItem.innerHTML = selectedMoment.format("MMMM YYYY")
+  header.appendChild(centerItem)  
+
+  let nextButton = document.createElement("i")
+  nextButton.className = "fas fa-chevron-right"
+
+  let rightItem = headerItem.cloneNode()
+  rightItem.dataset.action = "click->calendar#nextMonth"
+  rightItem.appendChild(nextButton)
+  header.appendChild(rightItem)
+  
   element.appendChild(header)
 }
 
@@ -58,7 +86,7 @@ const buildBody = (element, data, selectedMoment) => {
       day.classList.add("disabled")
     }
 
-    if(date.isSame(selectedMoment.clone().startOf('day'))) {
+    if(date.isSame(moment().startOf('day'))) {
       day.classList.add("current")
     }
 
@@ -74,17 +102,22 @@ export default class extends Controller {
   initialize()  {
     console.log("Calendar Initialized")
 
-    // Set selected month
-    this.data.set("selectedYear", 2020)
-    this.data.set("selectedMonth", 4)
+    this.selectedMoment = moment()
   }
 
   connect() {
-    let selectedMoment = moment()
-    buildCalendar(this, selectedMoment)
+    buildCalendar(this.context, this.selectedMoment)
   }
 
   pickDate(event) {
     console.log(event.target.dataset.date)
+  }
+
+  prevMonth(event) {
+    buildCalendar(this.context, this.selectedMoment.subtract(1, 'month'))
+  }
+
+  nextMonth(event) {
+    buildCalendar(this.context, this.selectedMoment.add(1, 'month'))
   }
 }

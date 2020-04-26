@@ -1,4 +1,5 @@
 @import "~normalize.css";
+@import '~@fortawesome/fontawesome-free/css/all.css';
 
 #calendar {
   max-width: 400px;
@@ -7,7 +8,16 @@
   #calendar-header {
     display: flex;
     justify-content: center;
-    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    .calendar-header-item {
+      height: 50px;
+      min-width: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }
 
