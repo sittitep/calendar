@@ -5,7 +5,6 @@ import './stylesheets/main.scss';
 
 console.log("it's working")
 
-
 // let calendar = document.createElement("div");
 // calendar.dataset.controller = "calendar";
 

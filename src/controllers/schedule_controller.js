@@ -13,9 +13,36 @@ const setActive = (scheduleOption) => {
   scheduleOption.innerHTML = "Confirm"
 }
 
+const buildOptions = (startTime, endTime, sessionDuration, restDuration) => {
+  let options = []
+  let startMoment = moment().hour(parseInt(startTime))
+  startMoment.minutes(0)
+
+  let endMoment = moment().hour(parseInt(endTime))
+  startMoment.minutes(0)
+
+  let totalDuration = parseInt(sessionDuration) + parseInt(restDuration)
+
+  while(true) {
+    if(startMoment.clone().add(totalDuration ,"minutes").valueOf() >= endMoment.valueOf()){
+      break;
+    }
+
+    options.push(startMoment.format("HH:mm"))
+    startMoment.add(totalDuration, "minutes")    
+  }
+
+  return options
+}
+
 export default class extends Controller {
   connect() {
-    let options = ["11:00", "12:00"]
+    let paths = window.location.hash.split("/")
+    paths = paths.slice(Math.max(paths.length - 2, 0))
+
+    let timeConstraints = paths[0].split("-")
+
+    let options = buildOptions(...timeConstraints)
 
     options.forEach( option => {
       let scheduleOption = document.createElement("div")
@@ -37,11 +64,11 @@ export default class extends Controller {
   }
 
   confirm(event) {
-    console.log(`Send request to make a schedult at ${this.data.get("date")}@${event.target.dataset.scheduleOption}`)
+    let text = `Your schedule, ${this.data.get("date")}@${event.target.dataset.scheduleOption}, has been sent.`
     
     let message = document.createElement("div")
     message.id = "modal-content-message"
-    message.innerHTML = "It's done"
+    message.innerHTML = text
 
     this.modalController.setBody(message)
   }
