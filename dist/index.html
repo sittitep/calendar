@@ -8,5 +8,12 @@
   <body>
     <div id="calendar" data-controller="calendar">
     </div>
+    <div id="modal" data-controller="modal" class="hidden">
+      <div id="modal-close" data-action="click->modal#close">
+        <i class="fas fa-times"></i>
+      </div>
+      <div id="modal-content">
+      </div>
+    </div>
   </body>
 </html>

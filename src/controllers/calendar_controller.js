@@ -1,6 +1,8 @@
 import { Controller } from "stimulus"
 import * as moment from "moment"
 
+import ModalController from "./modal_controller.js"
+
 const clearCalendar = (element) => {
   element.innerHTML = ''
 }
@@ -110,7 +112,7 @@ export default class extends Controller {
   }
 
   pickDate(event) {
-    console.log(event.target.dataset.date)
+    this.modalController.show(event.target.dataset.date)
   }
 
   prevMonth(event) {
@@ -120,4 +122,8 @@ export default class extends Controller {
   nextMonth(event) {
     buildCalendar(this.context, this.selectedMoment.add(1, 'month'))
   }
+
+  get modalController() {
+    return this.application.getControllerForElementAndIdentifier(document.querySelector("#modal"), "modal")
+  }  
 }
