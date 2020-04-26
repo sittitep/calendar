@@ -1,0 +1,38 @@
+@import "~normalize.css";
+
+#calendar {
+  max-width: 400px;
+  margin: 0px auto;
+
+  #calendar-header {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+  }
+}
+
+#calendar-body {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.calendar-body-day {
+  display: flex;
+  flex: 0 0 14.2857143%;
+  align-items: center;
+  justify-content: center;    
+}
+  
+.calendar-body-day:before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.calendar-body-day.disabled {
+  background-color: gainsboro;
+}
+
+.calendar-body-day.current {
+  background-color: cornflowerblue;
+}
